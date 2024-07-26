@@ -1,0 +1,165 @@
+/* Inside app.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root{
+  --main-colour: #D7FE63;
+  --text-other: #465b52;
+  --overlay: rgba(0,0,0,.3);
+  --bg-color: #272727
+}
+
+body{
+  background-color: var(--bg-color);
+  font-family: 'Poppins', sans-serif;
+}
+
+.Navbar{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1240px;
+  margin: auto;
+  height: 100%;
+  padding: 0 1rem;
+  color: var(--main-colour);
+  
+}
+
+.Navbar .Navlinks{
+  border-radius: 5rem;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: 2s;
+}
+.Navbar .Navlinks a:hover{
+  cursor:pointer;
+  background-color: var(--main-colour);
+  color: var(--bg-color);
+  border-radius: 5rem;
+}
+
+.OvrHero{
+  background-color: var(--overlay);
+  top: 0;
+  left: 0 ;
+  color: #fff;
+  height: 75vh;
+  width: 100%;
+  position: relative;
+}
+
+.OvrHero::before{
+  content: '';
+  background:no-repeat center/cover;
+  background-image: url('/assets/Rectangle\ 21.png');
+  height: 75vh;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.OvrHero .content{
+  color: var(--main-colour);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: space-around;
+  justify-content: space-evenly;
+}
+
+.navHeader{
+    position: fixed;
+    height: 90px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    transition: .3s ease-in;
+    overflow: hidden;
+}
+
+.textIntro h1{
+  color: var(--main-colour);
+}
+
+.btnIntro{
+  width: 20vw;
+  padding: 8px;
+  color: black;
+  font-weight: 600;
+  border-radius: 20px;
+  background-color: var(--main-colour);
+  transition: 1s ease-in;
+}
+.btnIntro:hover{
+  color: var(--main-colour);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.login{
+  height: 60vh;
+}
+
+.loginImg{
+  background-image: url("/assets/Robot blur.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-radius: 5%;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+/* .loginImg::before{
+  content: '';
+  background-color: rgba(0, 0, 0, 0.9) ;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+} */
+
+.loginForm{
+  height: 100%;
+  width: 100%;
+  color: white;
+
+}
+.loginForm input{
+  width: 25vw;
+  padding: 8px;
+  border-radius: 20px;
+}
+
+.loginForm .btnForm{
+  width: 25vw;
+  padding: 8px;
+  color: white;
+  font-weight: 600;
+  border-radius: 20px;
+  background-color: var(--main-colour);
+  transition: 1s ease-in;
+}
+.btnForm:hover{
+  color: var(--main-colour);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.demo {
+  max-width: 1000px; /* Maximum width but allows for responsiveness */
+  width: 100%; /* Ensures it takes up the available space */
+  height: auto; /* Maintains aspect ratio */
+  margin: 0 auto; /* Centers the div horizontally */
+  display: block; /* Ensures the div is treated as a block-level element */
+}
+
+/* Optional: Responsive Image inside .demo */
+.demo img {
+  width: 100%; /* Makes the image responsive */
+  height: auto; /* Maintains the image's aspect ratio */
+}
