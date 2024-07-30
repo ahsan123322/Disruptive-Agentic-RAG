@@ -7,7 +7,7 @@ const Intro = () => {
     <>
         <section className="intro grid grid-cols-1 lg:grid-cols-2  p-5">
             <div className="textIntro text-white flex flex-col items-start content-start justify-around p-5 leading-8 mx-10">
-                <b className='text-2xl'>Introducing</b>
+                <b className='text-2xl font-normal'>Introducing</b>
                 <h1 className="text-6xl font-bold">Synthesia AI</h1>
                 <p className="text-baseline text-wrap">
                     "Welcome to our advanced Chatbot – Your all-in-<br />one solution!

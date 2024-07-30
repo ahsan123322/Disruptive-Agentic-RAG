@@ -6,6 +6,7 @@ import Intro from './components/Overview/Intro'
 import Login from './components/Login/Login'
 import Dashboard from './components/Home/home'
 import Overview from './components/Overview/Overview'
+import Blog from './components/blog/blog'
 import { NavLink, Router, Routes,Route } from 'react-router-dom';
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/menu" element={<Overview />} />
+      <Route path="/blog" element={<Blog />} />
       {/* Define other routes as needed */}
     </Routes>
 
