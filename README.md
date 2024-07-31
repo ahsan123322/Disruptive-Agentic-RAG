@@ -44,8 +44,7 @@ graph TD
 
 1. Clone the repository:
    ```
-   git clone https://github.com/your-username/ai-document-qa.git
-   cd ai-document-qa
+   https://github.com/FastianAbdullah/Disruptive-Agentic-RAG.git
    ```
 
 2. Create a virtual environment and activate it:
