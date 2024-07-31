@@ -3,7 +3,7 @@ import os
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_text_splitters import RecursiveCharacterTextSplitter 
-from langchain_community.document_loaders import PDFPlumberLoader, TextLoader, CSVLoader, PyPDFLoader
+from langchain_community.document_loaders import PDFPlumberLoader, TextLoader, CSVLoader, PyPDFLoader, Docx2txtLoader, UnstructuredWordDocumentLoader   
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 from langchain.prompts import PromptTemplate
@@ -11,6 +11,9 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
 from langchain.chains import create_retrieval_chain
+from langchain.schema import Document as LangChainDocument
+
+
 
 from flask import Flask, request, jsonify
 from config import Config
@@ -22,6 +25,18 @@ from config import Config
 import main
 import tempfile 
 import pandas as pd
+import pandas as pd
+import docx2txt
+
+# LlamaIndex imports
+from llama_index.core import Settings, SimpleDirectoryReader, SummaryIndex, VectorStoreIndex
+from llama_index.llms.groq import Groq
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.core.node_parser import SentenceSplitter
+from llama_index.core.tools import QueryEngineTool
+from llama_index.core.query_engine.router_query_engine import RouterQueryEngine
+from llama_index.core.selectors import LLMSingleSelector
+from llama_index.core import Document as LlamaDocument
 
 app = Flask(__name__)
 
@@ -37,6 +52,10 @@ folder_path = "db"
 chat_history = []
 cached_llm = ChatGroq(model_name="llama3-8b-8192")
 embedding = HuggingFaceBgeEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+# LlamaIndex settings
+Settings.llm = Groq(api_key=groq_api_key, model="llama3-8b-8192")
+Settings.embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
 raw_prompt = PromptTemplate(
     input_variables=["input", "context"],
@@ -61,45 +80,23 @@ class DataLoader:
     
     def load_document(self):
         file_extension = os.path.splitext(self.filepath_or_url)[1].lower()
-        headers = {"USER_AGENT": self.user_agent}
+        
         
         if file_extension == '.pdf':
             loader = PDFPlumberLoader(self.filepath_or_url)
-            
-        elif file_extension in ['.txt', '.md', '.html','.json']:
-            loader = TextLoader(self.filepath_or_url, encoding='utf-8')
-        elif file_extension == '.csv':
-
-            loader = CSVLoader(
-                file_path=self.filepath_or_url,
-                csv_args={
-                    'delimiter': ',',
-                    'quotechar': '"'
-                }
-            )
-        elif file_extension == '.xlsx':
-           
+            documents = loader.load()
+        elif file_extension == '.txt':
+            with open(self.filepath_or_url, 'r', encoding='utf-8') as file:
+                text = file.read()
+            documents = [LangChainDocument(page_content=text, metadata={"source": self.filepath_or_url})]
+        elif file_extension in ['.docx', '.doc']:
+            text = docx2txt.process(self.filepath_or_url)
+            documents = [LangChainDocument(page_content=text, metadata={"source": self.filepath_or_url})]
+        elif file_extension in ['.xlsx', '.xls']:
             df = pd.read_excel(self.filepath_or_url)
+            documents = [LangChainDocument(page_content=df.to_string(), metadata={"source": self.filepath_or_url})]
             
-            # Generate output filename
-            base_name = os.path.basename(self.filepath_or_url)
-            file_name_without_ext = os.path.splitext(base_name)[0]
-            output_dir = os.path.dirname(self.filepath_or_url)
-            output_path = os.path.join(output_dir, f"{file_name_without_ext}.csv")
-            
-            df.to_csv(output_path, index=False)
-            print(f"CSV file saved at: {output_path}")
-            
-            loader = CSVLoader(
-                    file_path=output_path,
-                    csv_args={
-                    'delimiter': ',',
-                    'quotechar': '"'
-                }
-            )
-
         elif self.filepath_or_url.startswith(('http://', 'https://')):
-                    
             config = Config(
                 url=self.filepath_or_url,
                 match=f"{self.filepath_or_url}/**",
@@ -108,27 +105,89 @@ class DataLoader:
                 output_file_name="temp_output.json"
             )
             results = asyncio.run(main.crawl(config))
-            return [{'page_content': item['html'], 'metadata': {'source': item['url']}} for item in results]
+            return [LangChainDocument(page_content=item['html'], metadata={'source': item['url']}) for item in results]
+   
         else:
             raise ValueError(f"Unsupported file type: {file_extension}")
-        
-        documents = loader.load()
+
         return documents
 
-    def chunk_document(self, document, chunk_size=1024, chunk_overlap=80): 
+    def chunk_document(self, documents, chunk_size=1024, chunk_overlap=80):
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap,
             length_function=len,
         )
-        return text_splitter.split_documents(document)
+        return text_splitter.split_documents(documents)
 
     def process_document(self, chunk_size=1024, chunk_overlap=80):
-        document = self.load_document()
-        chunks = self.chunk_document(document, chunk_size, chunk_overlap)
+        documents = self.load_document()
+        if len(documents) == 1 and (self.filepath_or_url.endswith(('.xlsx', '.xls', '.docx', '.doc', '.txt')) or self.filepath_or_url.startswith(('http://', 'https://'))):
+            chunks = documents  # For Excel, Word, text files, and URLs, we're using the entire content as one document
+        else:
+            chunks = self.chunk_document(documents, chunk_size, chunk_overlap)
         print(f"Number of chunks: {len(chunks)}")
         print(chunks[0])
         return chunks
+    
+def convert_to_llama_documents(data):
+    llama_documents = []
+    if isinstance(data, dict) and 'documents' in data:  # Chroma data
+        for i, doc_text in enumerate(data['documents']):
+            metadata = data['metadatas'][i] if i < len(data['metadatas']) else {}
+            llama_doc = LlamaDocument(
+                text=doc_text,
+                metadata=metadata
+            )
+            llama_documents.append(llama_doc)
+    elif isinstance(data, list):
+        for doc in data:
+            if isinstance(doc, LangChainDocument):
+                llama_doc = LlamaDocument(
+                    text=doc.page_content,
+                    metadata=doc.metadata
+                )
+            elif isinstance(doc, LlamaDocument):
+                llama_doc = doc
+            else:
+                raise ValueError(f"Unsupported document type: {type(doc)}")
+            llama_documents.append(llama_doc)
+    else:
+        raise ValueError("Unsupported data format")
+    return llama_documents
+
+def create_query_router(documents):
+    splitter = SentenceSplitter(chunk_size=1024)
+    nodes = splitter.get_nodes_from_documents(documents)
+
+    summary_index = SummaryIndex(nodes)
+    vector_index = VectorStoreIndex(nodes)
+
+    summary_query_engine = summary_index.as_query_engine(
+        response_mode="tree_summarize",
+        use_async=True,
+    )
+    vector_query_engine = vector_index.as_query_engine()
+
+    summary_tool = QueryEngineTool.from_defaults(
+        query_engine=summary_query_engine,
+        description="Useful for summarization questions"
+    )
+    vector_tool = QueryEngineTool.from_defaults(
+        query_engine=vector_query_engine,
+        description="Useful for retrieving specific context"
+    )
+
+    query_engine = RouterQueryEngine(
+        selector=LLMSingleSelector.from_defaults(),
+        query_engine_tools=[
+            summary_tool,
+            vector_tool,
+        ],
+        verbose=True
+    )
+
+    return query_engine
 
 @app.route("/chat", methods=["POST"])
 def aiPost():
@@ -149,45 +208,28 @@ def askDocPost():
         query = json_content.get("query")
         print(f"query: {query}")
 
-        print("Loading vector store")
         vector_store = Chroma(persist_directory=folder_path, embedding_function=embedding)
-
-        print("Creating chain")
-        retriever = vector_store.as_retriever(
-            search_type="similarity_score_threshold",
-            search_kwargs={"k": 20, "score_threshold": 0.1},
-        )
-
-        retriever_prompt = ChatPromptTemplate.from_messages(
-            [
-                MessagesPlaceholder(variable_name="chat_history"),
-                ("human", "{input}"),
-                ("human", "Given the above conversation, generate a search query to lookup in order to get information relevant to the conversation"),
-            ]
-        )
-
-        history_aware_retriever = create_history_aware_retriever(
-            llm=cached_llm, retriever=retriever, prompt=retriever_prompt
-        )
-
-        document_chain = create_stuff_documents_chain(cached_llm, raw_prompt)
+        documents = vector_store.get()
+       
+        # Create LlamaIndex query router
+        llama_documents = convert_to_llama_documents(documents)
         
-        retrieval_chain = create_retrieval_chain(
-            history_aware_retriever, document_chain,
-        )
-
-        result = retrieval_chain.invoke({"input": query})
-        print(result["answer"])
+        query_engine = create_query_router(llama_documents)
+        # Use the query router to get the response
+        response = query_engine.query(query)
 
         chat_history.append(HumanMessage(content=query))
-        chat_history.append(AIMessage(content=result["answer"]))
+        chat_history.append(AIMessage(content=str(response)))
 
-        sources = [{"source": doc.metadata["source"], "page_content": doc.page_content} for doc in result["context"]]
+        # Extract sources (this might need adjustment based on LlamaIndex's response structure)
+        sources = [{"source": node.metadata.get("source", "Unknown"), "page_content": node.text} 
+                   for node in response.source_nodes] if hasattr(response, 'source_nodes') else []
 
-        response_answer = {"answer": result["answer"], "sources": sources}
+        response_answer = {"answer": str(response), "sources": sources}
         return jsonify(response_answer)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 
 @app.route("/add_document", methods=["POST"])
 def addDocument():
@@ -209,6 +251,7 @@ def addDocument():
         return jsonify(response)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 
 @app.route("/add_url", methods=["POST"])
 def addUrl():
