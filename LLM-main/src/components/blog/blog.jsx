@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +10,7 @@ import Footer from '../footer/footer';
 const blog = () => {
   return (
     <>
+
       <div className=" ">
     <Navbar />
     <Hero />
@@ -49,6 +51,7 @@ const blog = () => {
 </div>
 
    
+
     </>
   )
 }

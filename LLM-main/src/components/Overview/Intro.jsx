@@ -6,7 +6,8 @@ import './Intro.css'
 const Intro = () => {
   return (
     <>
-       <section className="intro grid grid-cols-1 lg:grid-cols-2 gap-5 p-5">
+
+       <section className="  grid grid-cols-1 lg:grid-cols-2 gap-5 p-5">
    
     <div className="textIntro text-white flex flex-col items-start justify-around p-5 mx-5 lg:mx-10 leading-7 lg:leading-8">
         <b className='text-xl lg:text-2xl font-normal'>Introducing</b>
@@ -29,6 +30,7 @@ const Intro = () => {
         <img src="/assets/Group 87.png" alt="Synthesia AI" className="object-cover max-w-full h-auto" />
     </div>
 </section>
+
 
     </>
   );

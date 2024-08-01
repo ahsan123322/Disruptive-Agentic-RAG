@@ -1,4 +1,7 @@
 import React from 'react'
+
+
+import icon from '/assets/Group 72.png'
 const footer = () => {
   return (
     <>
@@ -10,7 +13,7 @@ const footer = () => {
         <div className="flex  items-start mb-4 lg:mb-0 lg:w-1/3">
             {/* Logo Box */}
             <div className="rounded-full bg-[#D7FE63] mx-24 md:mx-1.5   w-10 h-10 flex items-center justify-center mr-3">
-                <img src="/assets/Group 72.png" alt="Logo" className="w-3/5 h-3/5 object-cover" />
+                <img src={icon} alt="Logo" className="w-3/5 h-3/5 object-cover" />
             </div>
             <div className="rounded-full md:ml-9 ml-6   w-10 h-10 flex items-center justify-center  text-[#D7FE63] text-sm lg:text-base font-semibold">
                 DisruptiveGPT
@@ -58,6 +61,7 @@ const footer = () => {
         </span>
     </div>
 </div>
+
 
     </>
   )
