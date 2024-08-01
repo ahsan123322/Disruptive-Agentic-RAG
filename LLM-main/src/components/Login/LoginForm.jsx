@@ -42,52 +42,42 @@ const provider = new GoogleAuthProvider();
 
   return (
     <>
-      <div className="loginForm flex h-screen flex-col justify-center items-center p-10">
-        <form className="p-8 rounded-md">
-          <h1 className="formHead text-5xl text-white font-bold mb-4 text-center">Log In</h1>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-white text-sm font-medium">Email or Phone Number</label>
-            <input
-              type="email"
-              id="email"
-              className="w-full mt-1 p-2 border text-white bg-transparent border-gray-300 focus:outline-none focus:border-blue-500"
-              placeholder="Enter your email or phone number"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="block text-white text-sm font-medium">Password</label>
-            <input
-              type="password"
-              id="password"
-              className="w-full mt-1 p-2 border text-white bg-transparent border-gray-300 focus:outline-none focus:border-blue-500"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <button
-            type="submit"
-            className="btnForm w-full text-white py-2 rounded-md hover:bg-black focus:outline-none focus:ring focus:border-blue-300 hover:text-white"
-            onClick={handleLogin}
-          >
-            Login
-          </button>
-        </form>
-        <br />
-        <p>or</p>
-        <br />
-        <div className="formImg flex flex-row content-center justify-between items-center">
-            <img onClick={signInWithGoogle} className='h-14 w-14 me-4' src="/assets/Google logo.png" alt="" />
-            <img className='h-14 w-14 me-4' src="/assets/Microsoft logo.png" alt="" />
-        </div>
-        <br />
-        <p><a href="#">Forgot Password</a></p>
-        <br />
-        <br />
-        <b>Don't have an account? <NavLink to="/signup" >SIGN UP</NavLink></b>
-      </div>
+        <div className="loginForm flex md:h-[96vh]  h-[65vh] flex-col justify-center items-center p-4 sm:p-6 lg:p-10">
+  <form className=" flex flex-col  gap-1 w-[77vw] md:w-[28vw]  justify-center">
+    <h1 className="formHead text-3xl sm:text-4xl lg:text-5xl text-white font-bold mb-4 text-center">login</h1>
+
+    <label htmlFor="email" className="text-white text-sm font-medium">Email or Phone Number</label>
+    <input
+      type="email"
+      id="email"
+      className="mt-1 p-3 border text-white bg-transparent border-gray-300 focus:outline-none focus:border-blue-500   rounded-3xl   text-lg"
+      placeholder="Enter your email or phone number"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+    />
+
+    <label htmlFor="password" className="mt-4 text-white text-sm font-medium">Password</label>
+    <input
+      type="password"
+      id="password"
+      className="mt-1 p-3 border text-white bg-transparent border-gray-300 focus:outline-none focus:border-blue-500   rounded-3xl  text-lg"
+      placeholder="Enter your password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+    />
+
+    <button
+      type="submit"
+      className="btnForm w-32 mx-auto  mt-6   text-white py-2 rounded-md bg-black hover:bg-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition duration-300"
+      onClick={handleLogin}
+    >
+      Login
+    </button>
+  </form>
+  <div className="flex justify-center mt-4 w-full max-w-md text-white py-3 rounded-full focus:outline-none focus:ring transition duration-300">
+  Don't have an account? <NavLink to="/signup"><span className=' text-[#D7FE63] '>Sign Up</span></NavLink>
+  </div>
+</div>
 
     </>
   );

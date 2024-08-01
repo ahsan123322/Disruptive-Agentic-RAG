@@ -52,7 +52,7 @@ const loginController = async (req, res) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "User not Registered",
+        message: "Email is incorrect",
       });
     }
     // passwordCheck
@@ -76,7 +76,7 @@ const loginController = async (req, res) => {
         httpOnly: true,
         secure: true,
       })
-      .status(201)
+      .status(200)
       .json(info);
   } catch (error) {
     return res.status(500).json({
