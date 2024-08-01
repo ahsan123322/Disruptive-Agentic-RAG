@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
-import logo from  '../assets/logo.png'
+import logo from  '/assets/logo.png'
 import { Link } from 'react-router-dom'
-import  settings  from '../assets/settings.png'
-import bellIcon from  '../assets/vector.png' 
-import userIcon from '../assets/userIcon.png'
-import send from '../assets/vector-1.png'
-import photo from '../assets/Group 49-2.png'
-import file from '../assets/Group 51-1.png'
-
+import  settings  from '/assets/settings.png'
+import bellIcon from  '/assets/vector.png' 
+import userIcon from '/assets/userIcon.png'
+import send from '/assets/Vector-1.png'
+import photo from '/assets/Group 49-2.png'
+import file from '/assets/Group 51-1.png'
 const ChatPage = () => {
   const [value,setValue] = useState('');
   const [text,setText] = useState([]);

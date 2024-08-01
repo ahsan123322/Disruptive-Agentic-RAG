@@ -78,7 +78,7 @@ body{
    position: fixed;
    
     width: 100%;
-    top: 1%;
+    top: 1.6%;
     left: 0;
     z-index: 1;
     transition: .3s ease-in-out;
