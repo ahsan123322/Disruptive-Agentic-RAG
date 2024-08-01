@@ -18,8 +18,8 @@ const Navbar = () => {
             {/* Navigation Links */}
             <div className="Navlinks hidden md:flex font-bold text-lg">
               <NavLink to="/" className="p-5 hover:text-gray-300">Overview</NavLink>
-              <NavLink to="/" className="p-5 hover:text-gray-300">Method</NavLink>
-              <NavLink to="/" className="p-5 hover:text-gray-300">API</NavLink>
+              <NavLink to="/chat" className="p-5 hover:text-gray-300">Method</NavLink>
+              <NavLink to="/api" className="p-5 hover:text-gray-300">API</NavLink>
               <NavLink to="/" className="p-5 hover:text-gray-300">Company</NavLink>
               <NavLink to="/login" className="p-5 hover:text-gray-300">Login</NavLink>
             </div>
@@ -44,8 +44,8 @@ const Navbar = () => {
             {navbarOpen && (
               <div className="md:hidden w-screen z-10   right-0 fixed  top-0  left-0 bottom-0  h-screen flex flex-col mt-4 items-center justify-center text-2xl  space-y-5 bg-gray-800">
                 <NavLink to="/" className="p-5 hover:text-gray-300">Overview</NavLink>
-                <NavLink to="/" className="p-5 hover:text-gray-300">Method</NavLink>
-                <NavLink to="/" className="p-5 hover:text-gray-300">API</NavLink>
+                <NavLink to="/chat" className="p-5 hover:text-gray-300">Method</NavLink>
+                <NavLink to="/api" className="p-5 hover:text-gray-300">API</NavLink>
                 <NavLink to="/" className="p-5 hover:text-gray-300">Company</NavLink>
                 <NavLink to="/login" className="p-5 hover:text-gray-300">Login</NavLink>
               </div>

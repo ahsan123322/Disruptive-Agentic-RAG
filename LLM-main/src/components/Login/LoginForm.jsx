@@ -44,7 +44,7 @@ const provider = new GoogleAuthProvider();
     <>
         <div className="loginForm flex md:h-[96vh]  h-[65vh] flex-col justify-center items-center p-4 sm:p-6 lg:p-10">
   <form className=" flex flex-col  gap-1 w-[77vw] md:w-[28vw]  justify-center">
-    <h1 className="formHead text-3xl sm:text-4xl lg:text-5xl text-white font-bold mb-4 text-center">login</h1>
+    <h1 className="formHead text-3xl sm:text-4xl lg:text-5xl text-white font-bold mb-4 text-center">Log in</h1>
 
     <label htmlFor="email" className="text-white text-sm font-medium">Email or Phone Number</label>
     <input
@@ -65,18 +65,25 @@ const provider = new GoogleAuthProvider();
       value={password}
       onChange={(e) => setPassword(e.target.value)}
     />
-
+ <br />
+        
     <button
       type="submit"
-      className="btnForm w-32 mx-auto  mt-6   text-white py-2 rounded-md bg-black hover:bg-gray-800 focus:outline-none focus:ring focus:border-blue-300 transition duration-300"
+      className="bg-[#D4EA5E]  text-black    text-2xl font-normal py-3 rounded-3xl   "
       onClick={handleLogin}
     >
-      Login
+      Log in
     </button>
+    <h4  className=' text-center mt-2'>or</h4>
+    <div className="formImg mt-2 mb-1.5 flex flex-row   justify-center items-center">
+            <img onClick={signInWithGoogle} className='h-14 w-14 me-4' src="/assets/Google logo.png" alt="" />
+            <img className='h-14 w-14 me-4 ' src="/assets/Microsoft logo.png" alt="" />
+        </div>
+        
+        <p className=' text-center  underline hh'><a href="#">Forgot Password</a></p>
   </form>
-  <div className="flex justify-center mt-4 w-full max-w-md text-white py-3 rounded-full focus:outline-none focus:ring transition duration-300">
-  Don't have an account? <NavLink to="/signup"><span className=' text-[#D7FE63] '>Sign Up</span></NavLink>
-  </div>
+ 
+  
 </div>
 
     </>
