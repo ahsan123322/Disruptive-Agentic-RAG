@@ -22,7 +22,7 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/menu" element={<Overview />} />
       <Route path="/chat" element={<ChatPage />} />
-      <Route path="/blog" element={<Blog />} />
+      
       <Route path="/signup" element={<Signup />} />
       <Route path="/api" element={<Api />} />
       {/* Define other routes as needed */}
