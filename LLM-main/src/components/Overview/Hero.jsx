@@ -16,13 +16,13 @@ const Hero = () => {
         <p className='text-base text-center sm:text-lg  mt-10 sm:mt-10 mb-5 sm:mb-10 p-5 sm:p-7'>
             “ - Your Instant AI Companion,<br /> Making Every Interaction <br /> Effortless”
         </p>
-        <div className="  md:items-center text-[#D4EA5E]   px-24 flex  flex-col sm:flex-row  md:px-0 sm:px-5 text-base sm:text-xl space-y-3.5  sm:space-y-0 sm:space-x-5">
-            <div className="descrp flex flex-col  items-center px-3 ">
+        <div className="  md:items-center text-[#D4EA5E]  justify-center items-center px-24    flex  flex-col sm:flex-row  md:px-0 sm:px-5 text-base sm:text-xl space-y-3.5  sm:space-y-0 sm:space-x-5">
+            <div className="descrp flex flex-col text-center  items-center px-3 ">
                 <FontAwesomeIcon icon={faServer} size='lg' />
-                <p>Custom </p>
+                <p className=' '>Custom </p>
                 <p>APIs</p>
             </div>
-            <div className="descrp flex flex-col  items-center px-3 text-center">
+            <div className="descrp flex flex-col   items-center px-3 text-center">
                 <FontAwesomeIcon icon={faBrain} size='lg' />
                 <p>Fast </p>
                 <p>Retrieval</p>
