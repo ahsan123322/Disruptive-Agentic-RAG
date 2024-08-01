@@ -1,42 +1,37 @@
 from dotenv import load_dotenv
 import os
+
+#Langchain Imports.
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_text_splitters import RecursiveCharacterTextSplitter 
-from langchain_community.document_loaders import PDFPlumberLoader, TextLoader, CSVLoader, PyPDFLoader, Docx2txtLoader, UnstructuredWordDocumentLoader   
+from langchain_community.document_loaders import PDFPlumberLoader  
 from langchain_community.vectorstores import Chroma
 from langchain_community.embeddings import HuggingFaceBgeEmbeddings
 from langchain.prompts import PromptTemplate
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.history_aware_retriever import create_history_aware_retriever
 from langchain.chains import create_retrieval_chain
 from langchain.schema import Document as LangChainDocument
 
-
-
+# Fask imports
 from flask import Flask, request, jsonify
 from config import Config
 import asyncio
-from playwright.async_api import async_playwright
-import json
-import fnmatch
 from config import Config
-import main
-import tempfile 
+import main 
 import pandas as pd
 import pandas as pd
 import docx2txt
 
 # LlamaIndex imports
-from llama_index.core import Settings, SimpleDirectoryReader, SummaryIndex, VectorStoreIndex
+from llama_index.core import Settings, SummaryIndex, VectorStoreIndex,Document as LlamaDocument
 from llama_index.llms.groq import Groq
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core.tools import QueryEngineTool
 from llama_index.core.query_engine.router_query_engine import RouterQueryEngine
 from llama_index.core.selectors import LLMSingleSelector
-from llama_index.core import Document as LlamaDocument
 
 app = Flask(__name__)
 
@@ -69,10 +64,6 @@ raw_prompt = PromptTemplate(
     Assistant: """
 )
 
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1024, chunk_overlap=80, length_function=len, is_separator_regex=False
-)
-
 class DataLoader:
     def __init__(self, filepath_or_url, user_agent=None):
         self.filepath_or_url = filepath_or_url
@@ -80,7 +71,6 @@ class DataLoader:
     
     def load_document(self):
         file_extension = os.path.splitext(self.filepath_or_url)[1].lower()
-        
         
         if file_extension == '.pdf':
             loader = PDFPlumberLoader(self.filepath_or_url)
@@ -106,7 +96,6 @@ class DataLoader:
             )
             results = asyncio.run(main.crawl(config))
             return [LangChainDocument(page_content=item['html'], metadata={'source': item['url']}) for item in results]
-   
         else:
             raise ValueError(f"Unsupported file type: {file_extension}")
 
@@ -122,7 +111,7 @@ class DataLoader:
 
     def process_document(self, chunk_size=1024, chunk_overlap=80):
         documents = self.load_document()
-        if len(documents) == 1 and (self.filepath_or_url.endswith(('.xlsx', '.xls', '.docx', '.doc', '.txt')) or self.filepath_or_url.startswith(('http://', 'https://'))):
+        if len(documents) == 1 and (self.filepath_or_url.endswith(('.xlsx', '.xls')) or self.filepath_or_url.startswith(('http://', 'https://'))):
             chunks = documents  # For Excel, Word, text files, and URLs, we're using the entire content as one document
         else:
             chunks = self.chunk_document(documents, chunk_size, chunk_overlap)
