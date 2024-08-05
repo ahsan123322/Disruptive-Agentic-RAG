@@ -9,7 +9,7 @@ const Intro = () => {
 
        <section className="  grid grid-cols-1 lg:grid-cols-2 gap-5 p-5">
    
-    <div className="textIntro text-white flex flex-col items-start justify-around p-5 mx-5 lg:mx-10 leading-7 lg:leading-8">
+    <div className="textIntro text-white flex flex-col items-start justify-around  lg:mx-10 leading-7 lg:leading-8">
         <b className='text-xl lg:text-2xl font-normal'>Introducing</b>
         <h1 className="text-4xl lg:text-6xl font-bold">Synthesia AI</h1>
         <p className="text-base lg:text-lg  leading-relaxed">
@@ -21,8 +21,8 @@ const Intro = () => {
             Chatbot, simplifying your interactions and <br />
             enhancing productivity."
         </p>
-        <button className='btnIntro text-base lg:text-lg mt-5 px-4 py-2' type="button">
-            Try Synthesia AI <FontAwesomeIcon className='icon rotate-45 ml-2' icon={faArrowUp} />
+        <button className='bg-[#D7FE63] rounded-3xl text-black text-base  mt-5 px-4 py-2' type="button">
+            Try Synthesia AI <FontAwesomeIcon className='icon text-[30px]  font-light rotate-45 ml-2' icon={faArrowUp} />
         </button>
     </div>
    

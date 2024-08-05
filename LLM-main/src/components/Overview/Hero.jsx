@@ -13,7 +13,7 @@ const Hero = () => {
             <img src={icon} className="w-16 h-16 sm:w-15 sm:h-15 " />
             <span className="font-bold  text-white">Synthesia.Ai</span>
         </div>
-        <p className='text-base text-center sm:text-lg  mt-10 sm:mt-10 mb-5 sm:mb-10 p-5 sm:p-7'>
+        <p className='text-base text-start font-medium sm:text-lg  mt-10 sm:mt-10 mb-5 sm:mb-10 p-5 sm:p-7'>
             “ - Your Instant AI Companion,<br /> Making Every Interaction <br /> Effortless”
         </p>
         <div className="  md:items-center text-[#D4EA5E]  justify-center items-center px-24    flex  flex-col sm:flex-row  md:px-0 sm:px-5 text-base sm:text-xl space-y-3.5  sm:space-y-0 sm:space-x-5">
@@ -28,7 +28,7 @@ const Hero = () => {
                 <p>Retrieval</p>
             </div>
             <div className="descrp flex flex-col  items-center px-3 text-center">
-                <img src='/assets/iconAa.png' className='text-center' style={{ height: "auto", width: "40px" }} />
+                <img src='/assets/iconAa.png' className='text-center' style={{  width: "80px" , height:'50px' }} />
                 <p>Text Completion </p>
                 <p>APIs</p>
             </div>

@@ -32,7 +32,7 @@ const provider = new GoogleAuthProvider();
         // The signed-in user info.
         const user = result.user;
         console.log(user);
-        navigate('/dashboard');
+        navigate('/chat');
       }).catch((error) => {
         // Handle Errors here.
         console.error(error);
@@ -51,7 +51,7 @@ const provider = new GoogleAuthProvider();
       type="email"
       id="email"
       className="mt-1 p-3 border text-white bg-transparent border-gray-300 focus:outline-none focus:border-blue-500   rounded-3xl   text-lg"
-      placeholder="Enter your email or phone number"
+     
       value={email}
       onChange={(e) => setEmail(e.target.value)}
     />
@@ -61,7 +61,7 @@ const provider = new GoogleAuthProvider();
       type="password"
       id="password"
       className="mt-1 p-3 border text-white bg-transparent border-gray-300 focus:outline-none focus:border-blue-500   rounded-3xl  text-lg"
-      placeholder="Enter your password"
+     
       value={password}
       onChange={(e) => setPassword(e.target.value)}
     />
